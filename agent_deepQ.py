@@ -3,7 +3,7 @@ import random
 import numpy as np
 from collections import deque
 from environment import SnakeGameAI,Direction,Point,BLOCK_SIZE
-from model import Linear_QNet,QTrainer
+from model_deepQ import Linear_QNet,QTrainer
 #from Helper import plot
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
@@ -134,6 +134,8 @@ def train():
             game.reset()
             agent.n_game += 1
             agent.train_long_memory()
+            if score>record:
+                record = score
             if(score > reward): # new High score 
                 reward = score
                 agent.model.save()
