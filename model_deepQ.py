@@ -16,7 +16,11 @@ class Linear_QNet(nn.Module):
 		return x
 
 	def save(self, file_name='model_name.pth'):
+<<<<<<< Updated upstream:model_deepQ.py
 		model_folder_path = r'C:\\Users\\Mithushan\Desktop'
+=======
+		model_folder_path = r'C:\\Users\\robin\\OneDrive\Dokument\\GitHub\\tnm095'
+>>>>>>> Stashed changes:model.py
 		file_name = os.path.join(model_folder_path, file_name)
 		torch.save(self.state_dict(), file_name)
 
