@@ -21,10 +21,7 @@ class Agent:
 
         final_move = [0,0,0]
 
-        #going on a straight path 
-        move=0
-
-           #before getting inside the cycle
+        #before getting inside the cycle
         if (self.in_cycle is False):
             move = self.get_snake_in_cycle(game)
 
