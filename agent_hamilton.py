@@ -2,7 +2,7 @@ from environment import SnakeGameAI,Direction,Point,BLOCK_SIZE
 import random 
 import numpy as np
 
-def model_ham():
+def model_hamilton():
     dir_map=np.load('direction_map.npy')
     map = np.zeros((32,24))
     map[:,22]= 1
@@ -52,7 +52,7 @@ class Agent:
         return final_move
 
 def play():
-    map, dir_map= model_ham()
+    map, dir_map= model_hamilton()
     agent = Agent(map, dir_map)
     game  = SnakeGameAI()
    
