@@ -23,7 +23,7 @@ class Direction(Enum):
 Point = namedtuple('Point','x , y')
 
 BLOCK_SIZE=20
-SPEED = 10
+SPEED = 50
 WHITE = (255,255,255)
 RED = (200,0,0)
 BLUE1 = (0,0,255)
@@ -43,7 +43,10 @@ class SnakeGameAI:
         self.reset()
     def reset(self):
         self.direction = Direction.RIGHT
+        #self.direction = Direction.DOWN
         self.head = Point(self.w/2,self.h/2)
+        #self.head = Point(0,20)
+
         self.snake = [self.head,
                       Point(self.head.x-BLOCK_SIZE,self.head.y),
                       Point(self.head.x-(2*BLOCK_SIZE),self.head.y)]
@@ -98,9 +101,13 @@ class SnakeGameAI:
 
     def _update_ui(self):
         self.display.fill(BLACK)
-        for pt in self.snake:
-            pygame.draw.rect(self.display,BLUE1,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
-            pygame.draw.rect(self.display,BLUE2,pygame.Rect(pt.x+4,pt.y+4,12,12))
+        for i,pt in enumerate(self.snake):
+            if(i==0):
+                pygame.draw.rect(self.display,WHITE,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
+                pygame.draw.rect(self.display,BLACK,pygame.Rect(pt.x+4,pt.y+4,12,12))
+            else:
+                pygame.draw.rect(self.display,BLUE1,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
+                pygame.draw.rect(self.display,BLUE2,pygame.Rect(pt.x+4,pt.y+4,12,12))
         pygame.draw.rect(self.display,RED,pygame.Rect(self.food.x,self.food.y,BLOCK_SIZE,BLOCK_SIZE))
         text = font.render("Score: "+str(self.score),True,WHITE)
         self.display.blit(text,[0,0])
