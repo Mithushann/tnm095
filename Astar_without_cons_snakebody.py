@@ -19,44 +19,22 @@ class Agent:
     def __init__(self):
         self.n_game = 0
         self.score=0
-    
-    def is_hinderence(self,in_snake, box):
-        for _box in in_snake:
-            if _box.x==box.x and _box.y==box.y:
-                return True
-        return False
 
     def get_action(self, game):
-        _head  = game.head
-        _food  = game.food
-        _snake = game.snake
+        _head=game.head
+        _food=game.food
 
         #all four nearest neighbour 
         right_neighbour = Point(_head.x+20,_head.y)
-        left_neighbour  = Point(_head.x-20,_head.y)
-        up_neighbour    = Point(_head.x,_head.y-20)
-        down_neighbour  = Point(_head.x,_head.y+20)
+        left_neighbour = Point(_head.x-20,_head.y)
+        up_neighbour = Point(_head.x,_head.y-20)
+        down_neighbour = Point(_head.x,_head.y+20)
 
         # Calculating the distance between future location of the head and food 
-        if self.is_hinderence(_snake,right_neighbour):
-            right_distance=9999
-        else:
-            right_distance = self.manhattan(right_neighbour,_food)
-        
-        if self.is_hinderence(_snake,left_neighbour):
-            left_distance=9999
-        else:
-            left_distance  = self.manhattan(left_neighbour,_food)
-
-        if self.is_hinderence(_snake,up_neighbour):
-            up_distance=9999
-        else:
-            up_distance    = self.manhattan(up_neighbour,_food)
-
-        if self.is_hinderence(_snake, down_neighbour):
-            down_distance=9999
-        else:
-            down_distance  = self.manhattan(down_neighbour,_food)
+        right_distance = self.manhattan(right_neighbour,_food)
+        left_distance = self.manhattan(left_neighbour,_food)
+        up_distance = self.manhattan(up_neighbour,_food)
+        down_distance = self.manhattan(down_neighbour,_food)
 
         distance_vec = np.array([right_distance, left_distance, up_distance, down_distance])
          
@@ -64,9 +42,9 @@ class Agent:
     
         direction_cns = np.array([])
         for dist in distance_vec:
-            min_index     = np.argmin(distance_vec) 
-            direction_cns = np.append(direction_cns, min_index)
-            distance_vec[min_index]=10000 #inf
+            min_index =  np.argmin(distance_vec) 
+            direction_cns=np.append(direction_cns, min_index)
+            distance_vec[min_index]=10000
             
         for i,dir_cn in enumerate(direction_cns):
             dir_cn=int(dir_cn+1)
@@ -141,23 +119,14 @@ def play():
   
     agent = Agent()
     game  = SnakeGameAI()
-    sum=0
-    high_score=0
+   
     while True:
         final_move = agent.get_action(game) 
         reward, done, score = game.play_step(final_move) 
         if done:
             game.reset()
             agent.n_game += 1
-            sum = sum +score
-            avg = int(sum/agent.n_game)
-
-            if score > high_score:
-                high_score=score
-
-            print('Game: ',agent.n_game,'Score: ',score, 'Average: ',avg, 'Record: ',high_score)
-        if agent.n_game>=100:
-            break
+            print('Game:',agent.n_game,'Score:',score)
   
 if(__name__=="__main__"):
     play()
