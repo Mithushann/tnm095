@@ -4,14 +4,26 @@ import numpy as np
 
 def model_hamilton():
     dir_map=np.load('direction_map.npy')
+    dir_map = np.load('direction_map2.npy')
+    
     map = np.zeros((32,24))
-    map[:,22]= 1
-    map[0,22]= 0
-    map[31,22]=0
-    map[:,0] = 2
-    map[0,23]= 2
-    map[31,23]= 2
-    map[30,0]= 2
+    # First path 
+    # map[:,22]= 1
+    # map[0,22]= 0
+    # map[31,22]=0
+    # map[:,0] = 2
+    # map[0,23]= 2
+    # map[31,23]= 2
+    # map[30,0]= 2
+
+    # Second path
+    map[:,:] = 0
+    map[0,:] = 2
+    map[16,:] = 1
+    map[16,23] = 0
+    map[31,:] = 2
+    map[17,:] = 1
+    map[17,0] = 0
  
     return map, dir_map
 
@@ -29,8 +41,6 @@ class Agent:
         self.dir_map=in_dir_map
 
     def get_action(self, game):
-        circuit = prim_maze_generator(int(480/40), int(640/40))
-
         head = game.snake[0]
         dir=0
         if game.direction == Direction.RIGHT:
