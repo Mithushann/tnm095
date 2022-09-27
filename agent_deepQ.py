@@ -115,6 +115,7 @@ def train():
     while True:
         # Get Old state
         state_old = agent.get_state(game)
+        print(state_old)
 
         # get move
         final_move = agent.get_action(state_old)
