@@ -31,36 +31,27 @@ class Agent:
         snake_neighbours = []
         for i,s in enumerate(snake):
             if(i != 0 and i != len(snake)-1):
-                print('first if')
                 if(Point(s.x+20,s.y)!=snake[i+1] or Point(s.x+20,s.y) != snake[i-1]):
-                    print('inner if 1')
                     snake_neighbours.append(Point(s.x+20,s.y))
                 
                 if(Point(s.x-20,s.y)!=snake[i+1] or Point(s.x-20,s.y) != snake[i-1]):
-                    print('inner if 2')
                     snake_neighbours.append(Point(s.x-20,s.y))
 
                 if(Point(s.x,s.y-20)!=snake[i+1] or Point(s.x,s.y-20) != snake[i-1]):
-                    print('inner if 3')
                     snake_neighbours.append(Point(s.x,s.y-20))
                 
                 if(Point(s.x,s.y+20)!=snake[i+1] or Point(s.x,s.y+20) != snake[i-1]):
-                    print('inner if 4')
                     snake_neighbours.append(Point(s.x,s.y+20))
+        
         return snake_neighbours
     
 
-    def mark_neighbour(self, game, vec):
-        BLUE1 = (0,0,255)
-        for pt in vec:
-            pygame.draw.rect(game.display,BLUE1,pygame.Rect(0,0,BLOCK_SIZE,BLOCK_SIZE))
     def get_action(self, game):
         _head  = game.head
         _food  = game.food
         _snake = game.snake
         snake_neighbours=self.snake_neighbour_vec(_snake)
-        self.mark_neighbour(game,snake_neighbours)
-        print(len(snake_neighbours))
+        game.neighbours = snake_neighbours
 
         #all four nearest neighbour 
         right_neighbour = Point(_head.x+20,_head.y)
@@ -78,21 +69,21 @@ class Agent:
         
         if self.is_hinderence(_snake,left_neighbour):
             left_distance=9999
-        elif self.is_hinderence(snake_neighbours,right_neighbour):
+        elif self.is_hinderence(snake_neighbours,left_neighbour):
             left_distance=8888
         else:
             left_distance  = self.manhattan(left_neighbour,_food)
 
         if self.is_hinderence(_snake,up_neighbour):
             up_distance=9999
-        elif self.is_hinderence(snake_neighbours,right_neighbour):
+        elif self.is_hinderence(snake_neighbours,up_neighbour):
             up_distance=8888
         else:
             up_distance    = self.manhattan(up_neighbour,_food)
 
         if self.is_hinderence(_snake, down_neighbour):
             down_distance=9999
-        elif self.is_hinderence(snake_neighbours,right_neighbour):
+        elif self.is_hinderence(snake_neighbours,down_neighbour):
             down_distance=8888
         else:
             down_distance  = self.manhattan(down_neighbour,_food)
@@ -100,7 +91,6 @@ class Agent:
         distance_vec = np.array([right_distance, left_distance, up_distance, down_distance])
          
         # What action should we take to go to closest neighbour
-    
         direction_cns = np.array([])
         for dist in distance_vec:
             min_index     = np.argmin(distance_vec) 

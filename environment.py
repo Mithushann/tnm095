@@ -23,12 +23,13 @@ class Direction(Enum):
 Point = namedtuple('Point','x , y')
 
 BLOCK_SIZE=20
-SPEED = 10
+SPEED = 100
 WHITE = (255,255,255)
 RED = (200,0,0)
 BLUE1 = (0,0,255)
 BLUE2 = (0,100,255)
 BLACK = (0,0,0)
+YELLOW = (0,100,0)
 
 class SnakeGameAI:
     def __init__(self,w=640,h=480):# 32 x 24 -> 31 x 23
@@ -38,6 +39,7 @@ class SnakeGameAI:
         self.display = pygame.display.set_mode((self.w,self.h))
         pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
+        self.neighbours=[]
         
         #init game state
         self.reset()
@@ -101,10 +103,13 @@ class SnakeGameAI:
 
     def _update_ui(self):
         self.display.fill(BLACK)
+        for n in self.neighbours:
+            pygame.draw.rect(self.display,YELLOW,pygame.Rect(n.x,n.y,BLOCK_SIZE,BLOCK_SIZE))
         for i,pt in enumerate(self.snake):
             if(i==0):
                 pygame.draw.rect(self.display,WHITE,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
                 pygame.draw.rect(self.display,BLACK,pygame.Rect(pt.x+4,pt.y+4,12,12))
+                
             else:
                 pygame.draw.rect(self.display,BLUE1,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
                 pygame.draw.rect(self.display,BLUE2,pygame.Rect(pt.x+4,pt.y+4,12,12))
