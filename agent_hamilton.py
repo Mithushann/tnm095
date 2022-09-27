@@ -14,6 +14,8 @@ class Agent:
         self.in_cycle=False
 
     def get_action(self, game):
+        circuit = prim_maze_generator(int(480/40), int(640/40))
+
         head = game.snake[0]
         x = game.snake[0].x - game.snake[1].x
         y = game.snake[0].y - game.snake[1].y
