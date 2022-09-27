@@ -23,7 +23,7 @@ class Direction(Enum):
 Point = namedtuple('Point','x , y')
 
 BLOCK_SIZE=20
-SPEED = 100
+SPEED = 50
 WHITE = (255,255,255)
 RED = (200,0,0)
 GREEN_HEAD = (24, 69, 1)
@@ -44,10 +44,10 @@ class SnakeGameAI:
         #init game state
         self.reset()
     def reset(self):
-        self.direction = Direction.RIGHT
+        self.direction = Direction.LEFT
         #self.direction = Direction.DOWN
-        self.head = Point(self.w/2,self.h/2)
-        #self.head = Point(0,20)
+        #self.head = Point(self.w/2,self.h/2)
+        self.head = Point(300,0)
 
         self.snake = [self.head,
                       Point(self.head.x-BLOCK_SIZE,self.head.y),
