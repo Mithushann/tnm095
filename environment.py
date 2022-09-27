@@ -26,8 +26,8 @@ BLOCK_SIZE=20
 SPEED = 100
 WHITE = (255,255,255)
 RED = (200,0,0)
-BLUE1 = (0,0,255)
-BLUE2 = (0,100,255)
+GREEN_HEAD = (24, 69, 1)
+GREEN_BODY = (58, 163, 2)
 BLACK = (0,0,0)
 YELLOW = (0,100,0)
 
@@ -106,13 +106,10 @@ class SnakeGameAI:
         for n in self.neighbours:
             pygame.draw.rect(self.display,YELLOW,pygame.Rect(n.x,n.y,BLOCK_SIZE,BLOCK_SIZE))
         for i,pt in enumerate(self.snake):
-            if(i==0):
-                pygame.draw.rect(self.display,WHITE,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
-                pygame.draw.rect(self.display,BLACK,pygame.Rect(pt.x+4,pt.y+4,12,12))
-                
+            if i == 0:
+                pygame.draw.rect(self.display,GREEN_HEAD,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
             else:
-                pygame.draw.rect(self.display,BLUE1,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
-                pygame.draw.rect(self.display,BLUE2,pygame.Rect(pt.x+4,pt.y+4,12,12))
+                pygame.draw.rect(self.display,GREEN_BODY,pygame.Rect(pt.x,pt.y,BLOCK_SIZE,BLOCK_SIZE))
         pygame.draw.rect(self.display,RED,pygame.Rect(self.food.x,self.food.y,BLOCK_SIZE,BLOCK_SIZE))
         text = font.render("Score: "+str(self.score),True,WHITE)
         self.display.blit(text,[0,0])
