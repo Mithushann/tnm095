@@ -2,7 +2,7 @@ from decimal import MIN_EMIN
 from environment import SnakeGameAI,Direction,Point,BLOCK_SIZE
 import random 
 import numpy as np
-from Helper import plot
+import pygame
 
 class Agent:
     # Action
@@ -20,7 +20,6 @@ class Agent:
     def __init__(self):
         self.n_game = 0
         self.score=0
-        
     
     def is_hinderence(self,in_snake, box):
         for _box in in_snake:
@@ -28,10 +27,31 @@ class Agent:
                 return True
         return False
 
+    def snake_neighbour_vec(self, snake):
+        snake_neighbours = []
+        for i,s in enumerate(snake):
+            if(i != 0 and i != len(snake)-1):
+                if(Point(s.x+20,s.y)!=snake[i+1] or Point(s.x+20,s.y) != snake[i-1]):
+                    snake_neighbours.append(Point(s.x+20,s.y))
+                
+                if(Point(s.x-20,s.y)!=snake[i+1] or Point(s.x-20,s.y) != snake[i-1]):
+                    snake_neighbours.append(Point(s.x-20,s.y))
+
+                if(Point(s.x,s.y-20)!=snake[i+1] or Point(s.x,s.y-20) != snake[i-1]):
+                    snake_neighbours.append(Point(s.x,s.y-20))
+                
+                if(Point(s.x,s.y+20)!=snake[i+1] or Point(s.x,s.y+20) != snake[i-1]):
+                    snake_neighbours.append(Point(s.x,s.y+20))
+        
+        return snake_neighbours
+    
+
     def get_action(self, game):
         _head  = game.head
         _food  = game.food
         _snake = game.snake
+        snake_neighbours=self.snake_neighbour_vec(_snake)
+        game.neighbours = snake_neighbours
 
         #all four nearest neighbour 
         right_neighbour = Point(_head.x+20,_head.y)
@@ -42,28 +62,35 @@ class Agent:
         # Calculating the distance between future location of the head and food 
         if self.is_hinderence(_snake,right_neighbour):
             right_distance=9999
+        elif self.is_hinderence(snake_neighbours,right_neighbour):
+            right_distance=8888
         else:
             right_distance = self.manhattan(right_neighbour,_food)
         
         if self.is_hinderence(_snake,left_neighbour):
             left_distance=9999
+        elif self.is_hinderence(snake_neighbours,left_neighbour):
+            left_distance=8888
         else:
             left_distance  = self.manhattan(left_neighbour,_food)
 
         if self.is_hinderence(_snake,up_neighbour):
             up_distance=9999
+        elif self.is_hinderence(snake_neighbours,up_neighbour):
+            up_distance=8888
         else:
             up_distance    = self.manhattan(up_neighbour,_food)
 
         if self.is_hinderence(_snake, down_neighbour):
             down_distance=9999
+        elif self.is_hinderence(snake_neighbours,down_neighbour):
+            down_distance=8888
         else:
             down_distance  = self.manhattan(down_neighbour,_food)
 
         distance_vec = np.array([right_distance, left_distance, up_distance, down_distance])
          
         # What action should we take to go to closest neighbour
-    
         direction_cns = np.array([])
         for dist in distance_vec:
             min_index     = np.argmin(distance_vec) 
@@ -140,31 +167,25 @@ class Agent:
         return int(abs(point1.x-point2.x) + abs(point1.y-point2.y)) 
 
 def play():
+  
     agent = Agent()
     game  = SnakeGameAI()
     sum=0
     high_score=0
-    plot_scores=[]
-    plot_mean_scores=[]
     while True:
         final_move = agent.get_action(game) 
-        done, score, _ , _ , _ = game.play_step(final_move) 
+        done, score,_,_ = game.play_step(final_move) 
         if done:
             game.reset()
             agent.n_game += 1
             sum = sum +score
             avg = int(sum/agent.n_game)
 
-            plot_scores.append(score)
-            mean_score = sum / agent.n_game
-            plot_mean_scores.append(mean_score)
-            plot(plot_scores,plot_mean_scores)
-
             if score > high_score:
                 high_score=score
 
-            print(' Game: ', agent.n_game,'Score: ', score, 'Average: ', avg, 'Record: ', high_score )
-        if agent.n_game>=125:
+            print('Game: ',agent.n_game,'Score: ',score, 'Average: ',avg, 'Record: ',high_score)
+        if agent.n_game>=100:
             break
   
 if(__name__=="__main__"):
