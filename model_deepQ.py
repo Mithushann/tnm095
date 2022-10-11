@@ -15,8 +15,8 @@ class Linear_QNet(nn.Module):
 		x = self.linear2(x)
 		return x
 
-	def save(self, file_name='model_name.pth'):
-		model_folder_path = r'/Users/martanilsson/tnm095'
+	def save(self, file_name='model_name_2.pth'):
+		model_folder_path = r'C:\Users\Mithushan\Desktop\tnm095'
 		file_name = os.path.join(model_folder_path, file_name)
 		torch.save(self.state_dict(), file_name)
 

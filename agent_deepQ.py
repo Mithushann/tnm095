@@ -2,9 +2,9 @@ import torch
 import random 
 import numpy as np
 from collections import deque
-from environment import SnakeGameAI,Direction,Point,BLOCK_SIZE
-from model_deepQ import Linear_QNet,QTrainer
-#from Helper import plot
+from environment import SnakeGameAI, Direction, Point, BLOCK_SIZE
+from model_deepQ import Linear_QNet, QTrainer
+from Helper import plot
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = 0.001
@@ -92,7 +92,7 @@ class Agent:
         self.trainer.train_step(state,action,reward,next_state,done)
 
     def get_action(self,state):
-        # random moves: tradeoff explotation / exploitation
+        # random moves: tradeoff exploration / exploitation
         self.epsilon = 80 - self.n_game
         final_move = [0,0,0]
         if(random.randint(0,200)<self.epsilon):
@@ -115,13 +115,12 @@ def train():
     while True:
         # Get Old state
         state_old = agent.get_state(game)
-        print(state_old)
 
         # get move
         final_move = agent.get_action(state_old)
 
         # perform move and get new state
-        reward, done, score = game.play_step(final_move)
+        done, score,_,_, reward = game.play_step(final_move)
         state_new = agent.get_state(game)
 
         # train short memory
@@ -135,19 +134,34 @@ def train():
             game.reset()
             agent.n_game += 1
             agent.train_long_memory()
+            total_score += score
+            mean_score = total_score / agent.n_game
             if score>record:
                 record = score
             if(score > reward): # new High score 
                 reward = score
                 agent.model.save()
-            print('Game:',agent.n_game,'Score:',score,'Record:',record)
+            print('Game:',agent.n_game,'Score:',score,'Record:',record, 'Mean Score:',mean_score)
             
-            plot_scores.append(score)
-            total_score+=score
-            mean_score = total_score / agent.n_game
-            plot_mean_scores.append(mean_score)
-            #plot(plot_scores,plot_mean_scores)
+            # plot_scores.append(score)
+            # total_score+=score
+            # mean_score = total_score / agent.n_game
+            # plot_mean_scores.append(mean_score)
+            # plot(plot_scores,plot_mean_scores)
 
+def test():
+    agent = Agent()
+    agent.model.load_state_dict(torch.load('model_name_1.pth'))
+    #agent.model.load_state_dict(torch.load('model_name_2.pth'))
+    game = SnakeGameAI()
+    while True:
+        state_old = agent.get_state(game)
+        final_move = agent.get_action(state_old)
+        done, score,_,_, _ = game.play_step(final_move)
+        if done:
+            print('Game:',agent.n_game,'Score:',score )
+            game.reset()
 
 if(__name__=="__main__"):
+    #test()
     train()

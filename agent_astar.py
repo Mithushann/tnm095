@@ -2,6 +2,7 @@ from decimal import MIN_EMIN
 from environment import SnakeGameAI,Direction,Point,BLOCK_SIZE
 import random 
 import numpy as np
+from Helper import plot
 
 class Agent:
     # Action
@@ -19,6 +20,7 @@ class Agent:
     def __init__(self):
         self.n_game = 0
         self.score=0
+        
     
     def is_hinderence(self,in_snake, box):
         for _box in in_snake:
@@ -138,25 +140,31 @@ class Agent:
         return int(abs(point1.x-point2.x) + abs(point1.y-point2.y)) 
 
 def play():
-  
     agent = Agent()
     game  = SnakeGameAI()
     sum=0
     high_score=0
+    plot_scores=[]
+    plot_mean_scores=[]
     while True:
         final_move = agent.get_action(game) 
-        reward, done, score = game.play_step(final_move) 
+        done, score, _ , _ , _ = game.play_step(final_move) 
         if done:
             game.reset()
             agent.n_game += 1
             sum = sum +score
             avg = int(sum/agent.n_game)
 
+            plot_scores.append(score)
+            mean_score = sum / agent.n_game
+            plot_mean_scores.append(mean_score)
+            plot(plot_scores,plot_mean_scores)
+
             if score > high_score:
                 high_score=score
 
-            print('Game: ',agent.n_game,'Score: ',score, 'Average: ',avg, 'Record: ',high_score)
-        if agent.n_game>=100:
+            print(' Game: ', agent.n_game,'Score: ', score, 'Average: ', avg, 'Record: ', high_score )
+        if agent.n_game>=125:
             break
   
 if(__name__=="__main__"):

@@ -122,7 +122,8 @@ def play():
    
     while True:
         final_move = agent.get_action(game) 
-        reward, done, score = game.play_step(final_move) 
+        done, score, _, _ = game.play_step(final_move) 
+        print(done)
         if done:
             game.reset()
             agent.n_game += 1
