@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 def model_hamilton():
-    dir_map=np.load('direction_map.npy')
+    #dir_map=np.load('direction_map.npy')
     dir_map = np.load('direction_map2.npy')
     
     map = np.zeros((32,24))
@@ -19,11 +19,11 @@ def model_hamilton():
     # Second path
     map[:,:] = 0
     map[0,:] = 2
-    map[16,:] = 1
-    map[16,23] = 0
+    map[15,:] = 1
+    map[15:16,23] = 0
     map[31,:] = 2
-    map[17,:] = 1
-    map[17,0] = 0
+    map[16,:] = 1
+    map[15:16,0] = 0
  
     return map, dir_map
 

@@ -31,7 +31,7 @@ GREEN_BODY = (58, 163, 2)
 BLACK = (0,0,0)
 
 class SnakeGameAI:
-    def __init__(self,w=640,h=480):# 32 x 24 -> 31 x 23
+    def __init__(self,w=640,h=480):
         self.w=w
         self.h=h
         #init display
@@ -41,6 +41,7 @@ class SnakeGameAI:
         
         #init game state
         self.reset()
+    
     def reset(self):
         self.direction = Direction.RIGHT
         #self.direction = Direction.DOWN
